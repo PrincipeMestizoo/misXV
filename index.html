@@ -1,0 +1,746 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Mis XV · Heyli</title>
+    <meta
+      name="description"
+      content="Te invito a celebrar mis quince primaveras · Sábado 5 de diciembre · Finca El Rocío, vía El Caimo, Armenia, Quindío."
+    />
+    <meta name="theme-color" content="#0f2a21" />
+
+    <!-- Vista previa al compartir por WhatsApp / redes -->
+    <meta property="og:title" content="Mis XV · Heyli" />
+    <meta
+      property="og:description"
+      content="¡Hoy florecen mis quince primaveras! Sábado 5 de diciembre · 5:00 PM"
+    />
+    <meta property="og:image" content="images/beautiful.jpeg" />
+    <meta property="og:type" content="website" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230f2a21'/%3E%3Ctext x='32' y='43' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23e3c77f'%3EXV%3C/text%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles/styles.css" />
+  </head>
+  <body class="is-locked">
+    <!-- ============ Definiciones SVG compartidas (alas, adornos) ============ -->
+    <svg
+      width="0"
+      height="0"
+      style="position: absolute"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id="wingGreen" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#f4fbe9" stop-opacity=".95" />
+          <stop offset=".45" stop-color="#9fd3b0" stop-opacity=".85" />
+          <stop offset="1" stop-color="#d9b866" stop-opacity=".9" />
+        </linearGradient>
+        <linearGradient id="wingBlush" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff8f3" stop-opacity=".95" />
+          <stop offset=".5" stop-color="#f1c9c0" stop-opacity=".85" />
+          <stop offset="1" stop-color="#d9b866" stop-opacity=".9" />
+        </linearGradient>
+        <linearGradient id="wingGold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fffbe9" stop-opacity=".95" />
+          <stop offset=".5" stop-color="#ecd592" stop-opacity=".9" />
+          <stop offset="1" stop-color="#b98f3c" stop-opacity=".9" />
+        </linearGradient>
+        <linearGradient id="goldLine" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#c6a052" stop-opacity="0" />
+          <stop offset=".5" stop-color="#c6a052" />
+          <stop offset="1" stop-color="#c6a052" stop-opacity="0" />
+        </linearGradient>
+        <symbol id="ornament" viewBox="0 0 240 24">
+          <path d="M0 12h92" stroke="url(#goldLine)" stroke-width="1" />
+          <path d="M148 12h92" stroke="url(#goldLine)" stroke-width="1" />
+          <path
+            d="M96 12c6-8 14-8 18 0-4 8-12 8-18 0zM144 12c-6-8-14-8-18 0 4 8 12 8 18 0z"
+            fill="none"
+            stroke="#c6a052"
+            stroke-width="1"
+          />
+          <path
+            d="M120 2l2.6 7.4L130 12l-7.4 2.6L120 22l-2.6-7.4L110 12l7.4-2.6z"
+            fill="#c6a052"
+          />
+        </symbol>
+      </defs>
+    </svg>
+
+    <!-- ============ Portal de apertura ============ -->
+    <div class="portal" id="portal">
+      <div class="portal__half portal__half--l"></div>
+      <div class="portal__half portal__half--r"></div>
+      <div class="portal__content">
+        <div class="seal" aria-hidden="true">
+          <span class="seal__ring"></span>
+          <span class="seal__mono">H</span>
+        </div>
+        <p class="portal__eyebrow">Has recibido una invitación mágica</p>
+        <h1 class="portal__title">Mis XV <span>Heyli</span></h1>
+        <button class="btn btn--gold portal__btn" id="openInvite" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 2l2.4 7.2L22 12l-7.6 2.8L12 22l-2.4-7.2L2 12l7.6-2.8z"
+            />
+          </svg>
+          Abrir invitación
+        </button>
+        <p class="portal__hint">
+          Activa el sonido para una experiencia completa
+        </p>
+      </div>
+    </div>
+
+    <!-- Capas mágicas -->
+    <canvas class="dust" id="dust" aria-hidden="true"></canvas>
+    <div class="butterflies" id="butterflies" aria-hidden="true"></div>
+
+    <!-- Música de fondo (se repite) -->
+    <audio id="bgMusic" src="audio/golden_hour.mp3" preload="auto" loop></audio>
+    <button
+      class="fab fab--flies"
+      id="fliesToggle"
+      type="button"
+      aria-label="Ocultar mariposas"
+      aria-pressed="true"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M12 7.5c-1.6-3-4.8-4.6-7.2-3.8C2.6 4.4 2.7 8 4.8 10.4c-2 1.4-2.4 4.2-.8 5.8 1.9 1.9 5.1 1 6.9-1.6.4 1.6.6 3 1.1 4.4.5-1.4.7-2.8 1.1-4.4 1.8 2.6 5 3.5 6.9 1.6 1.6-1.6 1.2-4.4-.8-5.8 2.1-2.4 2.2-6-.1-6.7-2.4-.8-5.6.8-7.2 3.8z"
+        />
+      </svg>
+      <span class="fab__slash" aria-hidden="true"></span>
+    </button>
+    <button
+      class="music"
+      id="musicToggle"
+      type="button"
+      aria-label="Pausar música"
+      aria-pressed="true"
+    >
+      <span class="music__icon music__icon--note" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M9 18.5a2.5 2.5 0 1 1-2-2.45V5l11-2v11.5a2.5 2.5 0 1 1-2-2.45V7.1L9 8.4z"
+          />
+        </svg>
+      </span>
+      <span class="music__eq" aria-hidden="true"
+        ><i></i><i></i><i></i><i></i
+      ></span>
+    </button>
+
+    <main>
+      <!-- ============ 1. INTRODUCCIÓN ============ -->
+      <header class="hero" id="inicio">
+        <div class="hero__glow" aria-hidden="true"></div>
+        <svg
+          class="hero__vine hero__vine--l"
+          viewBox="0 0 200 400"
+          aria-hidden="true"
+        >
+          <path
+            d="M10 400C40 300 20 220 70 150S160 60 150 0"
+            fill="none"
+            stroke="#c6a052"
+            stroke-opacity=".45"
+            stroke-width="1.2"
+          />
+          <g fill="#2f6b52" fill-opacity=".75">
+            <path d="M42 300c-30-6-40-30-34-48 22 4 36 22 34 48z" />
+            <path d="M50 230c26-14 52-6 60 12-22 12-46 8-60-12z" />
+            <path d="M80 160c-28-10-34-36-24-52 22 8 32 30 24 52z" />
+            <path d="M120 100c24-16 50-10 58 6-20 14-44 12-58-6z" />
+            <path d="M146 40c-22-14-22-38-10-50 18 12 22 32 10 50z" />
+          </g>
+          <g fill="#e3c77f">
+            <circle cx="30" cy="250" r="2" />
+            <circle cx="104" cy="196" r="1.6" />
+            <circle cx="140" cy="130" r="2.2" />
+            <circle cx="96" cy="70" r="1.4" />
+          </g>
+        </svg>
+        <svg
+          class="hero__vine hero__vine--r"
+          viewBox="0 0 200 400"
+          aria-hidden="true"
+        >
+          <path
+            d="M10 400C40 300 20 220 70 150S160 60 150 0"
+            fill="none"
+            stroke="#c6a052"
+            stroke-opacity=".45"
+            stroke-width="1.2"
+          />
+          <g fill="#2f6b52" fill-opacity=".75">
+            <path d="M42 300c-30-6-40-30-34-48 22 4 36 22 34 48z" />
+            <path d="M50 230c26-14 52-6 60 12-22 12-46 8-60-12z" />
+            <path d="M80 160c-28-10-34-36-24-52 22 8 32 30 24 52z" />
+            <path d="M120 100c24-16 50-10 58 6-20 14-44 12-58-6z" />
+          </g>
+          <g fill="#e3c77f">
+            <circle cx="30" cy="250" r="2" />
+            <circle cx="104" cy="196" r="1.6" />
+            <circle cx="140" cy="130" r="2.2" />
+          </g>
+        </svg>
+
+        <div class="hero__content">
+          <p class="hero__eyebrow" data-hero="1">Mis quince años</p>
+          <h2 class="hero__name" data-hero="2">Heyli</h2>
+          <svg class="ornament" data-hero="3" aria-hidden="true">
+            <use href="#ornament" />
+          </svg>
+          <blockquote class="hero__quote" data-hero="4">
+            En las manos de Dios<br />
+            pongo mis sueños y mi camino.<br />
+            <em>¡Hoy florecen mis quince primaveras!</em>
+          </blockquote>
+          <p class="hero__date" data-hero="5">
+            <span>Sábado</span><span class="dot">✦</span
+            ><span>05 · 12 · 2026</span><span class="dot">✦</span
+            ><span>5:00 PM</span>
+          </p>
+        </div>
+
+        <a
+          class="scroll-cue"
+          href="#prologo"
+          aria-label="Desplazarse al prólogo"
+        >
+          <span>Desliza</span>
+          <i aria-hidden="true"></i>
+        </a>
+
+        <svg
+          class="hero__wave"
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 60C240 120 480 0 720 40s480 80 720 0v80H0z"
+            fill="#fbf8f1"
+          />
+        </svg>
+      </header>
+
+      <!-- ============ 2. PRÓLOGO ============ -->
+      <section class="section section--cream" id="prologo">
+        <div class="container prologue">
+          <figure class="arch" data-reveal="left">
+            <div class="arch__frame">
+              <img
+                src="images/beautiful.jpeg"
+                alt="Retrato de Heyli"
+                loading="lazy"
+                width="1600"
+                height="1200"
+              />
+            </div>
+            <span class="arch__sparkle arch__sparkle--1" aria-hidden="true"
+              >✦</span
+            >
+            <span class="arch__sparkle arch__sparkle--2" aria-hidden="true"
+              >✧</span
+            >
+            <span class="arch__sparkle arch__sparkle--3" aria-hidden="true"
+              >✦</span
+            >
+          </figure>
+
+          <div class="prologue__text">
+            <p class="eyebrow" data-reveal></p>
+            <h2 class="title title--xv" data-reveal data-delay="1">
+              Mis <span>XV</span>
+            </h2>
+            <svg
+              class="ornament ornament--left"
+              data-reveal
+              data-delay="2"
+              aria-hidden="true"
+            >
+              <use href="#ornament" />
+            </svg>
+            <p class="lead" data-reveal data-delay="2">
+              Bajo la bendición de Dios, hoy comienza una de las etapas más
+              hermosas de mi vida. Mis quince años representan sueños que
+              florecen, metas que comienzan a tomar forma y recuerdos que
+              llevaré siempre en mi corazón.
+            </p>
+            <p data-reveal data-delay="3">
+              Quiero compartir contigo la alegría de este momento tan especial,
+              una noche llena de ilusión, sonrisas, emociones y momentos
+              inolvidables. Cada persona que me acompaña forma parte de mi
+              historia y hace que esta celebración sea aún más significativa.
+            </p>
+            <p data-reveal data-delay="4">
+              Te espero para vivir juntos una velada mágica que guardaré para
+              siempre entre mis más bellos recuerdos.
+            </p>
+            <p class="signature" data-reveal data-delay="5">Heyli</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 3. CALENDARIO Y CUENTA REGRESIVA ============ -->
+      <section class="section section--sage" id="fecha">
+        <div class="container">
+          <header class="section__head">
+            <p class="eyebrow" data-reveal>Reserva la fecha</p>
+            <h2 class="title" data-reveal data-delay="1">El gran día</h2>
+            <svg class="ornament" data-reveal data-delay="2" aria-hidden="true">
+              <use href="#ornament" />
+            </svg>
+          </header>
+
+          <div class="date-grid">
+            <article
+              class="calendar"
+              data-reveal="zoom"
+              aria-label="Calendario de diciembre 2026"
+            >
+              <div class="calendar__top">
+                <span class="calendar__ring" aria-hidden="true"></span>
+                <span class="calendar__ring" aria-hidden="true"></span>
+              </div>
+              <header class="calendar__head">
+                <p class="calendar__month" id="calMonth">Diciembre</p>
+                <p class="calendar__year" id="calYear">2026</p>
+              </header>
+              <div class="calendar__weekdays" aria-hidden="true">
+                <span>L</span><span>M</span><span>M</span><span>J</span
+                ><span>V</span><span>S</span><span>D</span>
+              </div>
+              <div class="calendar__days" id="calDays" role="grid"></div>
+              <p class="calendar__foot">Sábado 5 de diciembre · 5:00 PM</p>
+            </article>
+
+            <article class="countdown" data-reveal="right" data-delay="1">
+              <p class="countdown__eyebrow">Faltan</p>
+              <div class="countdown__grid" id="countdown" aria-live="polite">
+                <div class="unit">
+                  <span class="unit__num" data-unit="days">00</span
+                  ><span class="unit__label">Días</span>
+                </div>
+                <div class="unit">
+                  <span class="unit__num" data-unit="hours">00</span
+                  ><span class="unit__label">Horas</span>
+                </div>
+                <div class="unit">
+                  <span class="unit__num" data-unit="minutes">00</span
+                  ><span class="unit__label">Minutos</span>
+                </div>
+                <div class="unit">
+                  <span class="unit__num" data-unit="seconds">00</span
+                  ><span class="unit__label">Segundos</span>
+                </div>
+              </div>
+              <p class="countdown__msg" id="countdownMsg">
+                para vivir juntos una noche mágica
+              </p>
+              <a
+                class="btn btn--ghost"
+                id="addCalendar"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M7 2v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2V2h-2v2H9V2zm-2 8h14v10H5z"
+                  />
+                </svg>
+                Agregar a mi calendario
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 4. LUGAR Y MAPA ============ -->
+      <section class="section section--cream" id="lugar">
+        <div class="container">
+          <header class="section__head">
+            <p class="eyebrow" data-reveal>Ceremonia &amp; celebración</p>
+            <h2 class="title" data-reveal data-delay="1">Eucaristía y Lugar</h2>
+            <svg class="ornament" data-reveal data-delay="2" aria-hidden="true">
+              <use href="#ornament" />
+            </svg>
+          </header>
+
+          <div class="venue">
+            <div class="venue__info" data-reveal="left">
+              <div class="venue__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path
+                    d="M24 4v8M20 8h8"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    fill="none"
+                  />
+                  <path
+                    d="M10 44V24l14-10 14 10v20"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M20 44V34a4 4 0 0 1 8 0v10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    fill="none"
+                  />
+                  <path
+                    d="M6 44h36"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3 class="venue__name">Finca El Rocío</h3>
+              <p class="venue__road">Vía El Caimo · Armenia, Quindío</p>
+              <p class="venue__note">
+                La eucaristía y el evento se realizarán en el mismo lugar.
+              </p>
+              <div class="venue__time">
+                <span class="venue__time-label">Hora</span>
+                <span class="venue__time-value">5:00 <small>PM</small></span>
+              </div>
+
+              <!-- Cómo llegar: la finca no aparece en los mapas, se usa un punto de referencia -->
+              <div class="route">
+                <p class="route__title">¿Cómo llegar?</p>
+                <ol class="route__steps">
+                  <li>
+                    <span class="route__num">1</span>
+                    <div>
+                      <strong>Toma la vía a El Caimo</strong>
+                      <span>saliendo de Armenia.</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="route__num">2</span>
+                    <div>
+                      <strong>Llega a la Estación de Policía San Pedro</strong>
+                      <span>es el punto de referencia; ábrelo con el botón de abajo.</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="route__num">3</span>
+                    <div>
+                      <strong>Gira a la derecha y continua derecho, explora la vista de calle</strong>
+                      <span>en el mapa puedes recorrer el sector antes de salir.</span>
+                    </div>
+                  </li>
+                  <li>
+                    <span class="route__num">4</span>
+                    <div>
+                      <strong>¿Tienes dudas en el camino?</strong>
+                      <span>escríbenos por WhatsApp y te guiamos.</span>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+
+              <div class="venue__actions">
+                <a class="btn btn--forest" id="gmapsBtn"
+                  href="https://www.google.com/maps/search/?api=1&amp;query=4.4919404%2C-75.7021972"
+                  target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+                  Punto de referencia
+                </a>
+                <a class="btn btn--outline" id="wazeBtn"
+                  href="https://waze.com/ul?ll=4.4919404%2C-75.7021972&amp;navigate=yes"
+                  target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8z"/></svg>
+                  Waze
+                </a>
+                <a class="btn btn--outline btn--whatsapp" id="routeHelpBtn" href="#" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+                  Pedir indicaciones
+                </a>
+              </div>
+            </div>
+
+            <div class="map" data-reveal="right" data-delay="1">
+              <div class="map__frame">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!4v1794152729262!6m8!1m7!1sIBABS-QFWM1p-YweBt-ViQ!2m2!1d4.490519935493998!2d-75.7078231842634!3f302.55260757109744!4f-11.586530182315315!5f0.7605406233389884"
+                  width="600"
+                  height="450"
+                  style="border: 0"
+                  allowfullscreen=""
+                  loading="lazy"
+                  referrerpolicy="strict-origin-when-cross-origin"
+                ></iframe>
+                <div class="map__veil" aria-hidden="true"></div>
+              </div>
+              <div class="map__pin" aria-hidden="true">
+                <span class="map__pin-dot"></span>
+                Vista del sector · Vía El Caimo
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 5. DATOS RELEVANTES ============ -->
+      <section class="section section--forest" id="detalles">
+        <div class="container">
+          <header class="section__head">
+            <p class="eyebrow eyebrow--light" data-reveal>Importante</p>
+            <h2 class="title title--light" data-reveal data-delay="1">
+              Detalles para ti
+            </h2>
+            <svg class="ornament" data-reveal data-delay="2" aria-hidden="true">
+              <use href="#ornament" />
+            </svg>
+          </header>
+
+          <div class="details">
+            <!-- Código de vestuario -->
+            <article class="card" data-reveal data-delay="1">
+              <div class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path
+                    d="M17 6l7 6 7-6 9 6-4 10h-4v20H16V22h-4L8 12z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3 class="card__title">Código de vestuario</h3>
+              <p class="card__big">Beige</p>
+              <div class="swatches" aria-hidden="true">
+                <span style="--c: #efe3cf"></span
+                ><span style="--c: #e2cfb0"></span
+                ><span style="--c: #d2b994"></span
+                ><span style="--c: #bfa27a"></span>
+              </div>
+              <div class="reserved">
+                <span class="reserved__swatch" aria-hidden="true"></span>
+                <p>
+                  Se reserva el color <strong>verde</strong> para la quinceañera
+                </p>
+              </div>
+            </article>
+
+            <!-- Confirmación de asistencia -->
+            <article class="card card--feature" data-reveal data-delay="2">
+              <div class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path
+                    d="M6 12h36v26H6z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M6 12l18 14 18-14"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M24 34c-4-3-6-5-6-7.4a3 3 0 0 1 6-1 3 3 0 0 1 6 1C30 29 28 31 24 34z"
+                    fill="currentColor"
+                    opacity=".9"
+                  />
+                </svg>
+              </div>
+              <h3 class="card__title">Confirmación de asistencia</h3>
+              <p>
+                Para asegurar que vivas esta celebración de manera cómoda y
+                especial, te agradeceré confirmar tu asistencia a través del
+                siguiente botón.
+              </p>
+              <a
+                class="btn btn--gold btn--wide"
+                id="rsvpBtn"
+                href="#"
+                target="_blank"
+                rel="noopener"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4a.5.5 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.1 5.1 0 0 0 1.1 2.7 11.6 11.6 0 0 0 4.5 3.9c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"
+                  />
+                </svg>
+                Confirmar por WhatsApp
+              </a>
+              <p class="card__phone">311 333 7059</p>
+              <div class="deadline">
+                <span class="deadline__label"
+                  >Fecha máxima de confirmación</span
+                >
+                <span class="deadline__date">27 de noviembre</span>
+              </div>
+            </article>
+
+            <!-- Sobres o regalos -->
+            <article class="card" data-reveal data-delay="3">
+              <div class="card__icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48">
+                  <path
+                    d="M6 14h36v28H6z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M6 14l18 15 18-15"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M24 4l1.6 4.4L30 10l-4.4 1.6L24 16l-1.6-4.4L18 10l4.4-1.6z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+              <h3 class="card__title">Sobres o regalos</h3>
+              <p>
+                Tu presencia es mi mejor regalo. Si deseas tener un detalle
+                conmigo, lo recibiré con mucho cariño en sobre o como regalo.
+              </p>
+              <p class="card__script">¡Gracias!</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ 6. GALERÍA ============ -->
+      <section class="section section--cream" id="galeria">
+        <div class="container">
+          <header class="section__head">
+            <p class="eyebrow" data-reveal>Mi historia</p>
+            <h2 class="title" data-reveal data-delay="1">Quince primaveras</h2>
+            <svg class="ornament" data-reveal data-delay="2" aria-hidden="true">
+              <use href="#ornament" />
+            </svg>
+          </header>
+
+          <div
+            class="carousel"
+            id="carousel"
+            data-reveal="zoom"
+            data-delay="1"
+            role="region"
+            aria-roledescription="carrusel"
+            aria-label="Galería de fotografías"
+          >
+            <div class="carousel__viewport">
+              <div class="carousel__track" id="carouselTrack"></div>
+            </div>
+            <button
+              class="carousel__btn carousel__btn--prev"
+              id="prevBtn"
+              type="button"
+              aria-label="Foto anterior"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M15 5l-7 7 7 7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <button
+              class="carousel__btn carousel__btn--next"
+              id="nextBtn"
+              type="button"
+              aria-label="Foto siguiente"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M9 5l7 7-7 7"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <span
+              class="carousel__counter"
+              id="carouselCounter"
+              aria-hidden="true"
+              >01 / 07</span
+            >
+          </div>
+          <div
+            class="carousel__dots"
+            id="carouselDots"
+            role="tablist"
+            aria-label="Seleccionar foto"
+          ></div>
+        </div>
+      </section>
+
+      <!-- ============ CIERRE ============ -->
+      <footer class="footer">
+        <svg
+          class="footer__wave"
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M0 0h1440v40c-240 80-480-40-720 0S240 120 0 60z"
+            fill="#fbf8f1"
+          />
+        </svg>
+        <div class="container footer__inner">
+          <p class="footer__script" data-reveal>Te espero</p>
+          <p class="footer__text" data-reveal data-delay="1">
+            para hacer de esta noche un recuerdo eterno
+          </p>
+          <svg class="ornament" data-reveal data-delay="2" aria-hidden="true">
+            <use href="#ornament" />
+          </svg>
+          <p class="footer__sign" data-reveal data-delay="3">
+            Heyli · XV · 05.12.2026
+          </p>
+          <p class="footer__sign" data-reveal data-delay="3">
+            Invitación hecha por · Daniel González · 05.12.2026
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <script src="scripts/main.js" defer></script>
+  </body>
+</html>
